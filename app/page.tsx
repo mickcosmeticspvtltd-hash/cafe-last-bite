@@ -1,5 +1,4 @@
 // @ts-nocheck
-
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -585,7 +584,7 @@ export default function RestaurantQRWebsite() {
 
   return (
     <div className="min-h-screen bg-[#FFF8F0] text-[#1F1F1F]">
-      <Header setView={setView} cartCount={cartCount} setCartOpen={setCartOpen} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} />
+      {view !== "admin" && <Header setView={setView} cartCount={cartCount} setCartOpen={setCartOpen} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} />}
 
       {(!menuChecks.uniqueIds || !menuChecks.suggestionsValid || !menuChecks.categoriesValid) && (
         <div className="mx-auto max-w-7xl px-4 pt-4 md:px-8">
@@ -662,24 +661,24 @@ function HomePage({ setView, startAdd, menuItems }) {
   const bestSellers = menuItems.filter((item) => item.bestseller && item.available).slice(0, 4);
   return (
     <main>
-      <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-10 md:grid-cols-2 md:px-8 md:py-16">
+      <section className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-6 sm:py-10 md:grid-cols-2 md:px-8 md:py-16">
         <div>
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-white px-4 py-2 text-sm font-black text-[#D62828] shadow-sm"><I.star size={16} fill="currentColor" /> Scan QR • Order Faster</div>
-          <h1 className="max-w-xl text-5xl font-black leading-[0.95] tracking-tight md:text-7xl">Happiness, where every bite counts.</h1>
-          <p className="mt-6 max-w-lg text-lg leading-8 text-stone-600">Burgers, sandwiches, pizza, pasta, Chinese, Maggie, rice bowls and more — browse the menu and place your order instantly.</p>
+          <h1 className="max-w-xl text-4xl font-black leading-[0.95] tracking-tight sm:text-5xl md:text-7xl">Happiness, where every bite counts.</h1>
+          <p className="mt-5 max-w-lg text-base leading-7 text-stone-600 sm:text-lg sm:leading-8">Burgers, sandwiches, pizza, pasta, Chinese, Maggie, rice bowls and more — browse the menu and place your order instantly.</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button onClick={() => setView("menu")} className="px-8 py-4 text-base">Start Order</Button><Button onClick={() => setView("menu")} variant="outline" className="px-8 py-4 text-base">View Menu</Button></div>
-          <div className="mt-8 grid max-w-lg grid-cols-3 gap-3">{[["100+", "Menu items"], ["Pure", "Veg menu"], ["Quick", "QR ordering"]].map(([a, b]) => <div key={a} className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-orange-100"><p className="text-2xl font-black text-[#D62828]">{a}</p><p className="text-xs font-semibold text-stone-500">{b}</p></div>)}</div>
+          <div className="mt-6 grid max-w-lg grid-cols-3 gap-2 sm:gap-3">{[["100+", "Menu items"], ["Pure", "Veg menu"], ["Quick", "QR ordering"]].map(([a, b]) => <div key={a} className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-orange-100"><p className="text-2xl font-black text-[#D62828]">{a}</p><p className="text-xs font-semibold text-stone-500">{b}</p></div>)}</div>
         </div>
-        <div className="relative"><div className="absolute -inset-6 rounded-[3rem] bg-gradient-to-br from-orange-200 via-red-100 to-yellow-100 blur-2xl" /><div className="relative overflow-hidden rounded-[2rem] bg-[#1F1F1F] p-5 shadow-2xl"><div className="grid gap-4 sm:grid-cols-2"><FoodVisual emoji="🍔" title="Signature Burger" className="h-64 sm:col-span-2" /><FoodVisual emoji="🍟" title="Loaded Fries" className="h-44" /><FoodVisual emoji="🍕" title="Fresh Pizza" className="h-44" /></div></div></div>
+        <div className="relative"><div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-orange-200 via-red-100 to-yellow-100 blur-2xl sm:-inset-6 sm:rounded-[3rem]" /><div className="relative overflow-hidden rounded-[2rem] bg-[#1F1F1F] p-3 shadow-2xl sm:p-5"><div className="grid gap-4 sm:grid-cols-2"><FoodVisual emoji="🍔" title="Signature Burger" className="h-48 sm:col-span-2 sm:h-64" /><FoodVisual emoji="🍟" title="Loaded Fries" className="h-36 sm:h-44" /><FoodVisual emoji="🍕" title="Fresh Pizza" className="h-36 sm:h-44" /></div></div></div>
       </section>
-      <section className="mx-auto max-w-7xl px-4 py-8 md:px-8"><div className="mb-6 flex items-end justify-between gap-4"><div><p className="font-bold uppercase tracking-[0.25em] text-[#F77F00]">Menu categories</p><h2 className="mt-2 text-3xl font-black md:text-4xl">What are you craving today?</h2></div><Button onClick={() => setView("menu")} variant="outline" className="hidden md:inline-flex">Explore All</Button></div><div className="grid grid-cols-2 gap-4 md:grid-cols-4">{categories.slice(1, 13).map((cat) => <button key={cat} onClick={() => setView("menu")} className="rounded-3xl bg-white p-4 text-left shadow-sm ring-1 ring-orange-100 transition hover:-translate-y-1 hover:shadow-xl"><div className="mb-4 flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-100 to-red-50 text-5xl">{categoryEmoji[cat]}</div><p className="text-lg font-black">{cat}</p><p className="text-sm font-medium text-stone-500">{menuItems.filter((i) => i.category === cat).length} items</p></button>)}</div></section>
-      <section className="mx-auto max-w-7xl px-4 py-12 md:px-8"><p className="font-bold uppercase tracking-[0.25em] text-[#F77F00]">Best sellers</p><h2 className="mt-2 text-3xl font-black md:text-4xl">Customer favourites</h2><div className="mt-6 grid gap-5 md:grid-cols-4">{bestSellers.map((item) => <FoodCard key={item.id} item={item} startAdd={startAdd} />)}</div></section>
+      <section className="mx-auto max-w-7xl px-4 py-6 md:px-8 md:py-8"><div className="mb-6 flex items-end justify-between gap-4"><div><p className="font-bold uppercase tracking-[0.25em] text-[#F77F00]">Menu categories</p><h2 className="mt-2 text-2xl font-black sm:text-3xl md:text-4xl">What are you craving today?</h2></div><Button onClick={() => setView("menu")} variant="outline" className="hidden md:inline-flex">Explore All</Button></div><div className="grid grid-cols-2 gap-4 md:grid-cols-4">{categories.slice(1, 13).map((cat) => <button key={cat} onClick={() => setView("menu")} className="rounded-3xl bg-white p-4 text-left shadow-sm ring-1 ring-orange-100 transition hover:-translate-y-1 hover:shadow-xl"><div className="mb-4 flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-100 to-red-50 text-5xl">{categoryEmoji[cat]}</div><p className="text-lg font-black">{cat}</p><p className="text-sm font-medium text-stone-500">{menuItems.filter((i) => i.category === cat).length} items</p></button>)}</div></section>
+      <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12"><p className="font-bold uppercase tracking-[0.25em] text-[#F77F00]">Best sellers</p><h2 className="mt-2 text-2xl font-black sm:text-3xl md:text-4xl">Customer favourites</h2><div className="mt-6 grid gap-5 md:grid-cols-4">{bestSellers.map((item) => <FoodCard key={item.id} item={item} startAdd={startAdd} />)}</div></section>
     </main>
   );
 }
 
 function MenuPage({ activeCategory, setActiveCategory, search, setSearch, filteredItems, startAdd }) {
-  return <main className="mx-auto max-w-7xl px-4 py-8 md:px-8"><div className="mb-8 rounded-[2rem] bg-gradient-to-r from-[#1F1F1F] to-[#4A1D16] p-6 text-white md:p-8"><p className="font-bold uppercase tracking-[0.25em] text-orange-300">Digital Menu</p><h1 className="mt-2 text-4xl font-black md:text-5xl">Order your favourites</h1><p className="mt-3 max-w-2xl text-white/70">Current Cafe Last Bite menu added. Items can be edited later from Admin → Products.</p></div><div className="sticky top-[77px] z-30 mb-6 rounded-3xl border border-orange-100 bg-[#FFF8F0]/95 p-3 backdrop-blur-xl"><div className="relative mb-3"><I.search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search your cravings..." className="w-full rounded-2xl border border-orange-100 bg-white py-4 pl-12 pr-4 font-semibold outline-none focus:ring-2 focus:ring-orange-200" /></div><div className="flex gap-2 overflow-x-auto pb-1">{categories.map((cat) => <button key={cat} onClick={() => setActiveCategory(cat)} className={cn("whitespace-nowrap rounded-full px-5 py-3 text-sm font-black transition", activeCategory === cat ? "bg-[#D62828] text-white shadow-lg shadow-red-100" : "bg-white text-stone-600 ring-1 ring-orange-100")}>{cat}</button>)}</div></div><div className="grid gap-5 md:grid-cols-3 lg:grid-cols-4">{filteredItems.map((item) => <FoodCard key={item.id} item={item} startAdd={startAdd} />)}</div></main>;
+  return <main className="mx-auto max-w-7xl px-4 py-5 md:px-8 md:py-8"><div className="mb-5 rounded-[2rem] bg-gradient-to-r from-[#1F1F1F] to-[#4A1D16] p-5 text-white md:mb-8 md:p-8"><p className="font-bold uppercase tracking-[0.25em] text-orange-300">Digital Menu</p><h1 className="mt-2 text-3xl font-black sm:text-4xl md:text-5xl">Order your favourites</h1><p className="mt-3 max-w-2xl text-white/70">Current Cafe Last Bite menu added. Items can be edited later from Admin → Products.</p></div><div className="sticky top-[70px] z-30 mb-5 rounded-3xl border border-orange-100 bg-[#FFF8F0]/95 p-3 backdrop-blur-xl md:top-[77px] md:mb-6"><div className="relative mb-3"><I.search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search your cravings..." className="w-full rounded-2xl border border-orange-100 bg-white py-4 pl-12 pr-4 font-semibold outline-none focus:ring-2 focus:ring-orange-200" /></div><div className="flex gap-2 overflow-x-auto pb-1">{categories.map((cat) => <button key={cat} onClick={() => setActiveCategory(cat)} className={cn("whitespace-nowrap rounded-full px-5 py-3 text-sm font-black transition", activeCategory === cat ? "bg-[#D62828] text-white shadow-lg shadow-red-100" : "bg-white text-stone-600 ring-1 ring-orange-100")}>{cat}</button>)}</div></div><div className="grid gap-5 md:grid-cols-3 lg:grid-cols-4">{filteredItems.map((item) => <FoodCard key={item.id} item={item} startAdd={startAdd} />)}</div></main>;
 }
 
 function FoodCard({ item, startAdd }) {
@@ -793,8 +792,85 @@ function SuccessPage({ order, setView }) {
 }
 
 function AdminPanel({ adminTab, setAdminTab, orders, moveOrder, menuItems, updateProduct, addProduct, addManualOrder, offers, setOffers, coupons, setCoupons }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const tabs = ["Dashboard", "Orders", "Add Order", "Products", "Offers", "Coupons", "Analytics", "Settings"];
-  return <main className="mx-auto grid max-w-7xl gap-6 px-4 py-8 md:grid-cols-[260px_1fr] md:px-8"><aside className="rounded-[2rem] bg-[#1F1F1F] p-4 text-white shadow-xl"><div className="mb-6 rounded-3xl bg-white/10 p-4"><p className="text-xl font-black">Admin Panel</p><p className="mt-1 text-sm text-white/60">Cafe Last Bite control center</p></div><nav className="grid gap-2">{tabs.map((tab) => <button key={tab} onClick={() => setAdminTab(tab)} className={cn("rounded-2xl px-4 py-3 text-left text-sm font-black transition", adminTab === tab ? "bg-[#D62828] text-white" : "text-white/70 hover:bg-white/10 hover:text-white")}>{tab}</button>)}</nav></aside><section>{adminTab === "Dashboard" && <AdminDashboard orders={orders} menuItems={menuItems} offers={offers} coupons={coupons} setAdminTab={setAdminTab} />}{adminTab === "Orders" && <OrdersPanel orders={orders} moveOrder={moveOrder} />}{adminTab === "Add Order" && <AddOrderPanel menuItems={menuItems} addManualOrder={addManualOrder} />}{adminTab === "Products" && <ProductsPanel menuItems={menuItems} updateProduct={updateProduct} addProduct={addProduct} />}{adminTab === "Offers" && <OffersPanel offers={offers} setOffers={setOffers} />}{adminTab === "Coupons" && <CouponsPanel coupons={coupons} setCoupons={setCoupons} />}{adminTab === "Analytics" && <AnalyticsPanel orders={orders} menuItems={menuItems} />}{adminTab === "Settings" && <SettingsPanel />}</section></main>;
+
+  const selectTab = (tab) => {
+    setAdminTab(tab);
+    setSidebarOpen(false);
+  };
+
+  const SidebarContent = () => (
+    <>
+      <div className="mb-6 rounded-3xl bg-white/10 p-4">
+        <p className="text-xl font-black">Admin Panel</p>
+        <p className="mt-1 text-sm text-white/60">Cafe Last Bite control center</p>
+      </div>
+      <nav className="grid gap-2">
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => selectTab(tab)}
+            className={cn(
+              "rounded-2xl px-4 py-3 text-left text-sm font-black transition",
+              adminTab === tab ? "bg-[#D62828] text-white" : "text-white/70 hover:bg-white/10 hover:text-white"
+            )}
+          >
+            {tab}
+          </button>
+        ))}
+      </nav>
+    </>
+  );
+
+  return (
+    <main className="min-h-screen bg-[#FFF8F0] text-[#1F1F1F]">
+      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-orange-100 bg-[#FFF8F0]/95 px-4 py-3 backdrop-blur-xl md:hidden">
+        <button onClick={() => setSidebarOpen(true)} className="rounded-2xl bg-[#1F1F1F] p-3 text-white shadow-lg">
+          <I.menu size={20} />
+        </button>
+        <div className="text-center">
+          <p className="text-base font-black">Admin</p>
+          <p className="text-xs font-bold text-stone-500">{adminTab}</p>
+        </div>
+        <button onClick={() => window.history.pushState({}, "", window.location.pathname)} className="rounded-2xl bg-white px-3 py-2 text-xs font-black text-[#D62828] ring-1 ring-orange-100">
+          Customer
+        </button>
+      </div>
+
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <button aria-label="Close admin menu" onClick={() => setSidebarOpen(false)} className="absolute inset-0 bg-black/50" />
+          <aside className="relative h-full w-[82%] max-w-xs overflow-y-auto bg-[#1F1F1F] p-4 text-white shadow-2xl">
+            <div className="mb-4 flex items-center justify-between">
+              <p className="text-lg font-black">Menu</p>
+              <button onClick={() => setSidebarOpen(false)} className="rounded-full bg-white/10 p-2">
+                <I.x size={18} />
+              </button>
+            </div>
+            <SidebarContent />
+          </aside>
+        </div>
+      )}
+
+      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-5 md:grid-cols-[260px_1fr] md:px-8 md:py-8">
+        <aside className="sticky top-6 hidden h-[calc(100vh-3rem)] overflow-y-auto rounded-[2rem] bg-[#1F1F1F] p-4 text-white shadow-xl md:block">
+          <SidebarContent />
+        </aside>
+
+        <section className="min-w-0">
+          {adminTab === "Dashboard" && <AdminDashboard orders={orders} menuItems={menuItems} offers={offers} coupons={coupons} setAdminTab={setAdminTab} />}
+          {adminTab === "Orders" && <OrdersPanel orders={orders} moveOrder={moveOrder} />}
+          {adminTab === "Add Order" && <AddOrderPanel menuItems={menuItems} addManualOrder={addManualOrder} />}
+          {adminTab === "Products" && <ProductsPanel menuItems={menuItems} updateProduct={updateProduct} addProduct={addProduct} />}
+          {adminTab === "Offers" && <OffersPanel offers={offers} setOffers={setOffers} />}
+          {adminTab === "Coupons" && <CouponsPanel coupons={coupons} setCoupons={setCoupons} />}
+          {adminTab === "Analytics" && <AnalyticsPanel orders={orders} menuItems={menuItems} />}
+          {adminTab === "Settings" && <SettingsPanel />}
+        </section>
+      </div>
+    </main>
+  );
 }
 
 function AdminDashboard({ orders, menuItems, offers, coupons, setAdminTab }) {
@@ -804,7 +880,7 @@ function AdminDashboard({ orders, menuItems, offers, coupons, setAdminTab }) {
   const aov = orders.length ? Math.round(totalSales / orders.length) : 0;
   const activeOffers = offers.filter((o) => o.active).length;
   const activeCoupons = coupons.filter((c) => c.active).length;
-  return <div><AdminTitle title="Dashboard" subtitle="Today’s sales, orders, menu status and quick actions." /><div className="grid gap-4 md:grid-cols-4"><SummaryCard title="Today Sales" value={`₹${totalSales}`} /><SummaryCard title="Today Orders" value={orders.length} /><SummaryCard title="Pending Orders" value={pending} /><SummaryCard title="Completed" value={completed} /><SummaryCard title="Avg Order Value" value={`₹${aov}`} /><SummaryCard title="Menu Items" value={menuItems.length} /><SummaryCard title="Active Offers" value={activeOffers} /><SummaryCard title="Active Coupons" value={activeCoupons} /></div><div className="mt-6 grid gap-5 lg:grid-cols-3"><div className="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-orange-100 lg:col-span-2"><p className="text-xl font-black">Quick Actions</p><div className="mt-4 grid gap-3 sm:grid-cols-2"><Button onClick={() => setAdminTab("Add Order")} className="rounded-2xl py-5">Add Manual Order</Button><Button onClick={() => setAdminTab("Products")} variant="outline" className="rounded-2xl py-5">Manage Products</Button><Button onClick={() => setAdminTab("Offers")} variant="outline" className="rounded-2xl py-5">Create Offer</Button><Button onClick={() => setAdminTab("Analytics")} variant="dark" className="rounded-2xl py-5">View Analytics</Button></div></div><div className="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-orange-100"><p className="text-xl font-black">Recent Orders</p><div className="mt-4 grid gap-3">{orders.slice(0, 4).map((o) => <div key={o.id} className="rounded-2xl bg-[#FFF8F0] p-3"><p className="font-black">#{o.id} • ₹{o.total}</p><p className="text-xs font-bold text-stone-500">{o.customer} • {o.status}</p></div>)}</div></div></div></div>;
+  return <div><AdminTitle title="Dashboard" subtitle="Today’s sales, orders, menu status and quick actions." /><div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4"><div className="grid gap-4 md:grid-cols-4"><SummaryCard title="Today Sales" value={`₹${totalSales}`} /><SummaryCard title="Today Orders" value={orders.length} /><SummaryCard title="Pending Orders" value={pending} /><SummaryCard title="Completed" value={completed} /><SummaryCard title="Avg Order Value" value={`₹${aov}`} /><SummaryCard title="Menu Items" value={menuItems.length} /><SummaryCard title="Active Offers" value={activeOffers} /><SummaryCard title="Active Coupons" value={activeCoupons} /></div><div className="mt-6 grid gap-5 lg:grid-cols-3"><div className="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-orange-100 lg:col-span-2"><p className="text-xl font-black">Quick Actions</p><div className="mt-4 grid gap-3 sm:grid-cols-2"><Button onClick={() => setAdminTab("Add Order")} className="rounded-2xl py-5">Add Manual Order</Button><Button onClick={() => setAdminTab("Products")} variant="outline" className="rounded-2xl py-5">Manage Products</Button><Button onClick={() => setAdminTab("Offers")} variant="outline" className="rounded-2xl py-5">Create Offer</Button><Button onClick={() => setAdminTab("Analytics")} variant="dark" className="rounded-2xl py-5">View Analytics</Button></div></div><div className="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-orange-100"><p className="text-xl font-black">Recent Orders</p><div className="mt-4 grid gap-3">{orders.slice(0, 4).map((o) => <div key={o.id} className="rounded-2xl bg-[#FFF8F0] p-3"><p className="font-black">#{o.id} • ₹{o.total}</p><p className="text-xs font-bold text-stone-500">{o.customer} • {o.status}</p></div>)}</div></div></div></div>;
 }
 
 function OrdersPanel({ orders, moveOrder }) {
@@ -1150,7 +1226,7 @@ function SettingsPanel() {
 }
 
 function AdminTitle({ title, subtitle }) {
-  return <div className="mb-6"><p className="font-bold uppercase tracking-[0.25em] text-[#F77F00]">Admin</p><h1 className="mt-2 text-4xl font-black md:text-5xl">{title}</h1><p className="mt-2 text-stone-500">{subtitle}</p></div>;
+  return <div className="mb-5 md:mb-6"><p className="font-bold uppercase tracking-[0.25em] text-[#F77F00]">Admin</p><h1 className="mt-2 text-3xl font-black sm:text-4xl md:text-5xl">{title}</h1><p className="mt-2 text-sm leading-6 text-stone-500 sm:text-base">{subtitle}</p></div>;
 }
 
 function SummaryCard({ title, value }) {
