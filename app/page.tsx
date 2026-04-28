@@ -874,13 +874,66 @@ function AdminPanel({ adminTab, setAdminTab, orders, moveOrder, menuItems, updat
 }
 
 function AdminDashboard({ orders, menuItems, offers, coupons, setAdminTab }) {
-  const totalSales = orders.reduce((sum, o) => sum + o.total, 0);
-  const completed = orders.filter((o) => o.status === "Completed").length;
-  const pending = orders.filter((o) => o.status !== "Completed").length;
-  const aov = orders.length ? Math.round(totalSales / orders.length) : 0;
-  const activeOffers = offers.filter((o) => o.active).length;
-  const activeCoupons = coupons.filter((c) => c.active).length;
-  return <div><AdminTitle title="Dashboard" subtitle="Today’s sales, orders, menu status and quick actions." /><div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4"><div className="grid gap-4 md:grid-cols-4"><SummaryCard title="Today Sales" value={`₹${totalSales}`} /><SummaryCard title="Today Orders" value={orders.length} /><SummaryCard title="Pending Orders" value={pending} /><SummaryCard title="Completed" value={completed} /><SummaryCard title="Avg Order Value" value={`₹${aov}`} /><SummaryCard title="Menu Items" value={menuItems.length} /><SummaryCard title="Active Offers" value={activeOffers} /><SummaryCard title="Active Coupons" value={activeCoupons} /></div><div className="mt-6 grid gap-5 lg:grid-cols-3"><div className="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-orange-100 lg:col-span-2"><p className="text-xl font-black">Quick Actions</p><div className="mt-4 grid gap-3 sm:grid-cols-2"><Button onClick={() => setAdminTab("Add Order")} className="rounded-2xl py-5">Add Manual Order</Button><Button onClick={() => setAdminTab("Products")} variant="outline" className="rounded-2xl py-5">Manage Products</Button><Button onClick={() => setAdminTab("Offers")} variant="outline" className="rounded-2xl py-5">Create Offer</Button><Button onClick={() => setAdminTab("Analytics")} variant="dark" className="rounded-2xl py-5">View Analytics</Button></div></div><div className="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-orange-100"><p className="text-xl font-black">Recent Orders</p><div className="mt-4 grid gap-3">{orders.slice(0, 4).map((o) => <div key={o.id} className="rounded-2xl bg-[#FFF8F0] p-3"><p className="font-black">#{o.id} • ₹{o.total}</p><p className="text-xs font-bold text-stone-500">{o.customer} • {o.status}</p></div>)}</div></div></div></div>;
+  const totalSales = orders.reduce((sum, order) => sum + order.total, 0);
+  const completed = orders.filter((order) => order.status === "Completed").length;
+  const pending = orders.filter((order) => order.status !== "Completed").length;
+  const averageOrderValue = orders.length ? Math.round(totalSales / orders.length) : 0;
+  const activeOffers = offers.filter((offer) => offer.active).length;
+  const activeCoupons = coupons.filter((coupon) => coupon.active).length;
+
+  return (
+    <div>
+      <AdminTitle
+        title="Dashboard"
+        subtitle="Today's sales, orders, menu status and quick actions."
+      />
+
+      <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
+        <SummaryCard title="Today Sales" value={`₹${totalSales}`} />
+        <SummaryCard title="Today Orders" value={orders.length} />
+        <SummaryCard title="Pending Orders" value={pending} />
+        <SummaryCard title="Completed" value={completed} />
+        <SummaryCard title="Avg Order Value" value={`₹${averageOrderValue}`} />
+        <SummaryCard title="Menu Items" value={menuItems.length} />
+        <SummaryCard title="Active Offers" value={activeOffers} />
+        <SummaryCard title="Active Coupons" value={activeCoupons} />
+      </div>
+
+      <div className="mt-6 grid gap-5 lg:grid-cols-3">
+        <div className="rounded-[2rem] bg-white p-4 shadow-sm ring-1 ring-orange-100 sm:p-5 lg:col-span-2">
+          <p className="text-xl font-black">Quick Actions</p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <Button onClick={() => setAdminTab("Add Order")} className="rounded-2xl py-5">
+              Add Manual Order
+            </Button>
+            <Button onClick={() => setAdminTab("Products")} variant="outline" className="rounded-2xl py-5">
+              Manage Products
+            </Button>
+            <Button onClick={() => setAdminTab("Offers")} variant="outline" className="rounded-2xl py-5">
+              Create Offer
+            </Button>
+            <Button onClick={() => setAdminTab("Analytics")} variant="dark" className="rounded-2xl py-5">
+              View Analytics
+            </Button>
+          </div>
+        </div>
+
+        <div className="rounded-[2rem] bg-white p-4 shadow-sm ring-1 ring-orange-100 sm:p-5">
+          <p className="text-xl font-black">Recent Orders</p>
+          <div className="mt-4 grid gap-3">
+            {orders.slice(0, 4).map((order) => (
+              <div key={order.id} className="rounded-2xl bg-[#FFF8F0] p-3">
+                <p className="font-black">#{order.id} • ₹{order.total}</p>
+                <p className="text-xs font-bold text-stone-500">
+                  {order.customer} • {order.status}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function OrdersPanel({ orders, moveOrder }) {
@@ -1226,7 +1279,7 @@ function SettingsPanel() {
 }
 
 function AdminTitle({ title, subtitle }) {
-  return <div className="mb-5 md:mb-6"><p className="font-bold uppercase tracking-[0.25em] text-[#F77F00]">Admin</p><h1 className="mt-2 text-3xl font-black sm:text-4xl md:text-5xl">{title}</h1><p className="mt-2 text-sm leading-6 text-stone-500 sm:text-base">{subtitle}</p></div>;
+  return <div className="mb-6"><p className="font-bold uppercase tracking-[0.25em] text-[#F77F00]">Admin</p><h1 className="mt-2 text-4xl font-black md:text-5xl">{title}</h1><p className="mt-2 text-stone-500">{subtitle}</p></div>;
 }
 
 function SummaryCard({ title, value }) {
